@@ -1,0 +1,93 @@
+/* VedaAI Design System - Pixel-Perfect Figma Styles */
+
+:root {
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+
+  /* Colors */
+  --bg-app: #F4F6F9;
+  --bg-surface: #FFFFFF;
+  --bg-sidebar: #FFFFFF;
+  --bg-active-nav: #F1F3F6;
+  --bg-subtle: #F9FAFB;
+  --bg-hover: #F3F4F6;
+  
+  --primary-orange: #FF5A22;
+  --primary-orange-hover: #F04F18;
+  --primary-orange-light: rgba(255, 90, 34, 0.08);
+  --primary-orange-glow: rgba(255, 90, 34, 0.22);
+  
+  --text-primary: #121417;
+  --text-secondary: #4A5568;
+  --text-muted: #8C96A5;
+  --text-disabled: #A2A9B6;
+  
+  --border-light: #E4E7EC;
+  --border-dashed: #CBD2DE;
+  --border-focus: #FF5A22;
+  
+  --btn-disabled-bg: #E3E6EB;
+  --btn-disabled-text: #8E97A6;
+  
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.07);
+  --shadow-orange: 0 8px 24px rgba(255, 90, 34, 0.3);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+  
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  outline: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
