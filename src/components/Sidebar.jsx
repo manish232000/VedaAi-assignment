@@ -115,23 +115,6 @@ export default function Sidebar({
             {(!collapsed || isMobileOpen) && <span className="nav-label">Settings</span>}
           </button>
 
-          <div className="school-card" title="Delhi Public School - Bokaro Steel City">
-            <div className="school-crest">
-              <svg width="24" height="24" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="18" cy="18" r="16" stroke="#2E7D32" strokeWidth="2" fill="#E8F5E9" />
-                <path d="M18 7L24 13H20V23H16V13H12L18 7Z" fill="#2E7D32" />
-                <circle cx="18" cy="27" r="1.5" fill="#2E7D32" />
-                <path d="M10 22C10 26 14 28 18 28C22 28 26 26 26 22" stroke="#2E7D32" strokeWidth="1.5" strokeLinecap="round" />
-              </svg>
-            </div>
-            {(!collapsed || isMobileOpen) && (
-              <div className="school-details">
-                <div className="school-name">Delhi Public School</div>
-                <div className="school-location">Bokaro Steel City</div>
-              </div>
-            )}
-          </div>
-
           {collapsed && !isMobileOpen && (
             <button 
               className="bottom-expand-btn desktop-only" 

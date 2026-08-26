@@ -271,21 +271,10 @@ export default function EvaluatedView({ questionFile, answerFile }) {
           {/* Paper Canvas or Uploaded Document Viewport */}
           <div className="sheet-canvas-viewport">
             {pdfDoc ? (
-              /* Actual Uploaded Student PDF Rendered with Figma Highlight Overlays */
+              /* Actual Uploaded Student PDF Rendered cleanly */
               <div className="uploaded-pdf-sheet-wrapper">
                 <div className="pdf-canvas-overlay-container">
                   <canvas ref={pdfCanvasRef} className="native-pdf-canvas" />
-
-                  {/* Interactive Green Bounding Box & Anonymous Tag Overlay */}
-                  <div className="pdf-annotation-bounding-box">
-                    <div className="mapped-zone-tag">Q{selectedQuestionId}</div>
-                    <div className="figma-collab-cursor">
-                      <svg className="cursor-arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="#FF17D2">
-                        <path d="M3 3L10.07 19.97L12.58 12.58L19.97 10.07L3 3Z" stroke="#FFFFFF" strokeWidth="1.5" />
-                      </svg>
-                      <span className="collab-name-badge">Anonymous</span>
-                    </div>
-                  </div>
                 </div>
               </div>
             ) : (
@@ -370,13 +359,6 @@ export default function EvaluatedView({ questionFile, answerFile }) {
                   className={`handwritten-block mapped-highlight-zone ${selectedQuestionId === 2 ? 'active-zone' : ''}`}
                 >
                   <div className="mapped-zone-tag">Q2</div>
-
-                  <div className="figma-collab-cursor">
-                    <svg className="cursor-arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="#FF17D2">
-                      <path d="M3 3L10.07 19.97L12.58 12.58L19.97 10.07L3 3Z" stroke="#FFFFFF" strokeWidth="1.5" />
-                    </svg>
-                    <span className="collab-name-badge">Anonymous</span>
-                  </div>
 
                   <div className="handwritten-q-num">Q2.</div>
                   <div className="handwritten-content">
