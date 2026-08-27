@@ -808,6 +808,32 @@
   border-bottom-left-radius: 2px;
 }
 
+.image-icon-badge {
+  width: 28px;
+  height: 34px;
+  background: linear-gradient(135deg, #3B82F6 0%, #6366F1 100%);
+  border-radius: 4px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 4px;
+  position: relative;
+  flex-shrink: 0;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.25);
+  clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 0 100%);
+}
+
+.image-icon-badge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 7px;
+  height: 7px;
+  background: rgba(255, 255, 255, 0.45);
+  border-bottom-left-radius: 2px;
+}
+
 .pdf-badge-text {
   font-size: 8.5px;
   font-weight: 800;
@@ -1540,6 +1566,23 @@
   max-width: 100%;
   height: auto;
   border-radius: 4px;
+}
+
+.uploaded-image-sheet-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 10px 0;
+  transition: transform 0.15s ease;
+}
+
+.native-answer-image {
+  max-width: 90%;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 6px;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.15);
+  background: #FFFFFF;
 }
 
 .pdf-annotation-bounding-box {

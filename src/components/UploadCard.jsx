@@ -43,6 +43,19 @@ export default function UploadCard({
     setErrorMessage('');
     if (!selectedFile) return;
 
+    // Validate only PDF and Image files
+    const allowedExtensions = ['.pdf', '.jpg', '.jpeg', '.png', '.webp', '.svg', '.gif'];
+    const fileName = selectedFile.name || '';
+    const fileExt = '.' + (fileName.split('.').pop() || '').toLowerCase();
+    const isPdfOrImage = selectedFile.type === 'application/pdf' || 
+                         selectedFile.type?.startsWith('image/') || 
+                         allowedExtensions.includes(fileExt);
+
+    if (!isPdfOrImage) {
+      setErrorMessage('Only PDF and Image files (PDF, JPG, PNG, WEBP) are allowed.');
+      return;
+    }
+
     // Check size
     const sizeInMB = selectedFile.size / (1024 * 1024);
     if (sizeInMB > maxSizeMB) {
@@ -62,10 +75,12 @@ export default function UploadCard({
             setIsUploading(false);
             const mbSize = selectedFile.size / (1024 * 1024);
             const formattedSize = mbSize >= 1 ? `${Math.round(mbSize)}MB` : `${(selectedFile.size / 1024).toFixed(0)}KB`;
+            const isImg = selectedFile.type?.startsWith('image/') || /\.(jpg|jpeg|png|webp|gif|svg)$/i.test(selectedFile.name);
             onFileUpload({
               name: selectedFile.name,
               size: formattedSize,
-              pages: type === 'question' ? '2 Pages' : '6 Pages',
+              pages: isImg ? 'Image' : (type === 'question' ? '2 Pages' : '6 Pages'),
+              fileType: isImg ? 'image' : 'pdf',
               rawFile: selectedFile,
               timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
             });
@@ -105,11 +120,24 @@ export default function UploadCard({
           name: sampleFileName || (type === 'question' ? 'CBSE_Class10_Maths_MidTerm_2026.pdf' : 'Class10_Maths_AnswerSheets_BatchA.pdf'),
           size: sampleFileSize || (type === 'question' ? '2.4 MB' : '6.8 MB'),
           timestamp: 'Just now',
+          fileType: 'pdf',
           isSample: true
         });
       }, 200);
     }, 200);
   };
+
+  // Helper to determine file badge type and label
+  const getFileBadgeInfo = (fileName = '') => {
+    const ext = fileName.split('.').pop()?.toUpperCase() || 'PDF';
+    const isImg = ['JPG', 'JPEG', 'PNG', 'WEBP', 'SVG', 'GIF'].includes(ext);
+    return {
+      isImage: isImg,
+      label: isImg ? (ext === 'JPEG' ? 'JPG' : ext) : 'PDF'
+    };
+  };
+
+  const fileBadgeInfo = file ? getFileBadgeInfo(file.name) : { isImage: false, label: 'PDF' };
 
   return (
     <div className="upload-card-wrapper">
@@ -127,7 +155,7 @@ export default function UploadCard({
           type="file" 
           ref={fileInputRef} 
           style={{ display: 'none' }} 
-          accept=".pdf,.docx,.doc,.jpg,.jpeg,.png"
+          accept=".pdf,image/*,.png,.jpg,.jpeg,.webp"
           onChange={handleFileInputChange}
         />
 
@@ -147,7 +175,7 @@ export default function UploadCard({
               <h3 className="dropzone-title">
                 Upload <span className="highlight-text">{highlightText}</span>
               </h3>
-              <p className="dropzone-subtitle">Max {maxSizeMB}MB</p>
+              <p className="dropzone-subtitle">PDF, PNG, JPG • Max {maxSizeMB}MB</p>
             </div>
           </div>
         )}
@@ -166,9 +194,9 @@ export default function UploadCard({
         {file && !isUploading && (
           <div className="uploaded-capsule-wrapper" onClick={(e) => e.stopPropagation()}>
             <div className="uploaded-file-capsule">
-              {/* Red PDF Icon Badge */}
-              <div className="pdf-icon-badge">
-                <span className="pdf-badge-text">PDF</span>
+              {/* PDF or Image Badge */}
+              <div className={fileBadgeInfo.isImage ? "image-icon-badge" : "pdf-icon-badge"}>
+                <span className="pdf-badge-text">{fileBadgeInfo.label}</span>
               </div>
 
               {/* File Info */}
@@ -177,7 +205,7 @@ export default function UploadCard({
                   {file.name}
                 </p>
                 <p className="uploaded-file-meta">
-                  {file.size} • {file.pages || (type === 'question' ? '2 Pages' : '4 Pages')}
+                  {file.size} • {file.pages || (fileBadgeInfo.isImage ? 'Image' : (type === 'question' ? '2 Pages' : '4 Pages'))}
                 </p>
               </div>
 

@@ -23,8 +23,9 @@ export default function EvaluatedView({ questionFile, answerFile }) {
   const [allExpanded, setAllExpanded] = useState(false);
   const [mobileTab, setMobileTab] = useState('questions'); // 'questions' | 'answers'
   
-  // Real PDF State
+  // Real PDF & Image States
   const [pdfDoc, setPdfDoc] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
   const [isRenderingPdf, setIsRenderingPdf] = useState(false);
   const pdfCanvasRef = useRef(null);
   const answerRefs = useRef({});
@@ -46,27 +47,51 @@ export default function EvaluatedView({ questionFile, answerFile }) {
     loadQuestions();
   }, [questionFile]);
 
-  // 2. Load uploaded Answer Sheet PDF for native Canvas Rendering
+  // 2. Load uploaded Answer Sheet PDF or Image for native Rendering
   useEffect(() => {
-    async function loadAnswerPdf() {
-      if (answerFile && answerFile.rawFile && (answerFile.rawFile.type === 'application/pdf' || answerFile.name.endsWith('.pdf'))) {
+    let objectUrl = null;
+    async function loadAnswerDocument() {
+      if (!answerFile || !answerFile.rawFile) {
+        setPdfDoc(null);
+        setImageUrl(null);
+        setTotalPages(4);
+        return;
+      }
+
+      const isPdf = answerFile.rawFile.type === 'application/pdf' || answerFile.name?.toLowerCase().endsWith('.pdf');
+      const isImg = answerFile.rawFile.type?.startsWith('image/') || /\.(jpg|jpeg|png|webp|gif|svg)$/i.test(answerFile.name || '');
+
+      if (isPdf) {
         try {
           const arrayBuffer = await answerFile.rawFile.arrayBuffer();
           const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
           const loadedPdf = await loadingTask.promise;
           setPdfDoc(loadedPdf);
+          setImageUrl(null);
           setTotalPages(loadedPdf.numPages || 1);
           setCurrentPage(1);
         } catch (err) {
           console.warn('PDF load notice:', err);
           setPdfDoc(null);
         }
+      } else if (isImg) {
+        objectUrl = URL.createObjectURL(answerFile.rawFile);
+        setImageUrl(objectUrl);
+        setPdfDoc(null);
+        setTotalPages(1);
+        setCurrentPage(1);
       } else {
         setPdfDoc(null);
+        setImageUrl(null);
         setTotalPages(4);
       }
     }
-    loadAnswerPdf();
+
+    loadAnswerDocument();
+
+    return () => {
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+    };
   }, [answerFile]);
 
   // 3. Render PDF page onto Canvas when page or zoom changes
@@ -276,6 +301,11 @@ export default function EvaluatedView({ questionFile, answerFile }) {
                 <div className="pdf-canvas-overlay-container">
                   <canvas ref={pdfCanvasRef} className="native-pdf-canvas" />
                 </div>
+              </div>
+            ) : imageUrl ? (
+              /* Actual Uploaded Student Image */
+              <div className="uploaded-image-sheet-wrapper" style={{ transform: `scale(${zoomLevel / 100})`, transformOrigin: 'top center' }}>
+                <img src={imageUrl} alt="Uploaded Answer Sheet" className="native-answer-image" />
               </div>
             ) : (
               /* High-Fidelity Lined Paper Document Simulation */
